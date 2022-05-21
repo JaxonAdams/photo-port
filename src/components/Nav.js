@@ -1,23 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { capitalizeFirstLetter } from '../utils/helpers';
 
-const Nav = () => {
-    const categories = [
-        {
-          name: "Commercial",
-          description:
-            "Photos of grocery stores, food trucks, and other commercial projects",
-        },
-        { name: "Portraits", description: "Portraits of people in my life" },
-        { name: "Food", description: "Delicious delicacies" },
-        {
-          name: "Landscape",
-          description: "Fields, farmhouses, waterfalls, and the beauty of nature",
-        },
-    ];
+const Nav = (props) => {
+    const {
+        categories = [],
+        setCurrentCategory,
+        currentCategory,
+    } = props;
 
-    function categorySelected(name) {
-        return console.log(`${name} selected.`);
-    }
+    useEffect(() => {
+        document.title = capitalizeFirstLetter(currentCategory.name)
+    }, [currentCategory]);
 
     return (
         <header>
@@ -28,15 +21,15 @@ const Nav = () => {
             </h2>
             <nav>
                 <ul className='flex-row'>
-                    <li className='mx-2'>
-                        <a data-testid='about' href='#about'>About Me</a>
+                    <li style={{ marginRight: '2rem' }}>
+                        <a className='mx-2' data-testid='about' href='#about'>About Me</a>
                     </li>
-                    <li>
-                        <span>Contact</span>
+                    <li style={{ marginRight: '2rem' }}>
+                        <span className='mx-2'>Contact</span>
                     </li>
                     {categories.map(category => (
-                        <li className='mx-1' key={category.name}>
-                            <span onClick={() => categorySelected(category.name)}>{category.name}</span>
+                        <li className={`mx-1 ${currentCategory.name === category.name && 'navActive'}`} key={category.name}>
+                            <span onClick={() => setCurrentCategory(category)}>{category.name}</span>
                         </li>
                     ))}
                 </ul>
